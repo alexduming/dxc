@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>稻香村库存管理系统</title>
     <link rel="stylesheet" href="style.css">
+    <!-- Font Awesome 图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Chart.js 库 - 使用本地文件确保稳定性 -->
     <script src="chart.min.js"></script>
     <!-- 检查Chart.js加载状态 -->
@@ -22,20 +24,20 @@
 <body>
     <div class="container">
         <header>
-            <h1>稻香村库存管理系统</h1>
+            <h1><a href="#dashboard" id="logoLink">稻香村库存管理系统</a></h1>
             <div id="currentDate" class="date-display"></div>
         </header>
         
         <nav>
             <ul>
-                <li><a href="#dashboard" class="active">首页仪表盘</a></li>
-                <li><a href="#products">商品管理</a></li>
-                <li><a href="#inventory">库存管理</a></li>
-                <li><a href="#daily-entry">每日数据录入</a></li>
-                <li><a href="#sales">销售管理</a></li>
-                <li><a href="#finance">财务管理</a></li>
-                <li><a href="#reports">报表分析</a></li>
-                <li><a href="#help">使用说明</a></li>
+                <li><a href="#dashboard" class="active"><i class="fas fa-tachometer-alt"></i> 首页仪表盘</a></li>
+                <li><a href="#products"><i class="fas fa-box"></i> 商品管理</a></li>
+                <li><a href="#inventory"><i class="fas fa-warehouse"></i> 库存管理</a></li>
+                <li><a href="#daily-entry"><i class="fas fa-edit"></i> 每日数据录入</a></li>
+                <li><a href="#sales"><i class="fas fa-chart-line"></i> 销售管理</a></li>
+                <li><a href="#finance"><i class="fas fa-coins"></i> 财务管理</a></li>
+                <li><a href="#reports"><i class="fas fa-chart-bar"></i> 报表分析</a></li>
+                <li><a href="#help"><i class="fas fa-question-circle"></i> 使用说明</a></li>
             </ul>
         </nav>
         
@@ -46,47 +48,47 @@
                 
                 <div class="dashboard-cards">
                     <div class="card">
-                        <h3>今日销售额</h3>
+                        <h3><i class="fas fa-cash-register"></i> 今日销售额</h3>
                         <div id="todaySales" class="card-value">¥0.00</div>
                     </div>
                     <div class="card">
-                        <h3>本月销售额</h3>
+                        <h3><i class="fas fa-calendar-month"></i> 本月销售额</h3>
                         <div id="monthSales" class="card-value">¥0.00</div>
                     </div>
                     <div class="card">
-                        <h3>商品总数</h3>
+                        <h3><i class="fas fa-cubes"></i> 商品总数</h3>
                         <div id="totalProducts" class="card-value">0</div>
                     </div>
                     <div class="card">
-                        <h3>库存总价值</h3>
+                        <h3><i class="fas fa-dollar-sign"></i> 库存总价值</h3>
                         <div id="inventoryValue" class="card-value">¥0.00</div>
                     </div>
                 </div>
                 
                 <!-- 快捷操作区域 -->
                 <div class="quick-actions">
-                    <h3>快捷操作</h3>
+                    <h3><i class="fas fa-bolt"></i> 快捷操作</h3>
                     <div class="quick-actions-buttons">
-                        <button id="quick-enter-sales" class="btn-primary">录入今日销售</button>
-                        <button id="quick-check-inventory" class="btn-primary">查看库存状态</button>
-                        <button id="quick-add-product" class="btn-primary">添加新商品</button>
-                        <button id="quick-generate-report" class="btn-primary">生成今日报表</button>
+                        <button id="quick-enter-sales" class="btn-primary"><i class="fas fa-shopping-cart"></i> 录入今日销售</button>
+                        <button id="quick-check-inventory" class="btn-primary"><i class="fas fa-search"></i> 查看库存状态</button>
+                        <button id="quick-add-product" class="btn-primary"><i class="fas fa-plus"></i> 添加新商品</button>
+                        <button id="quick-generate-report" class="btn-primary"><i class="fas fa-file-alt"></i> 生成今日报表</button>
                     </div>
                 </div>
                 
                 <div class="charts-container">
                     <div class="chart-box">
-                        <h3>销售趋势</h3>
+                        <h3><i class="fas fa-chart-area"></i> 销售趋势</h3>
                         <canvas id="salesTrendChart"></canvas>
                     </div>
                     <div class="chart-box">
-                        <h3>热销商品</h3>
+                        <h3><i class="fas fa-fire"></i> 热销商品</h3>
                         <canvas id="topProductsChart"></canvas>
                     </div>
                 </div>
                 
                 <div class="table-container">
-                    <h3>库存预警</h3>
+                    <h3><i class="fas fa-exclamation-triangle"></i> 库存预警</h3>
                     <table id="lowStockTable" class="responsive-table">
                         <thead>
                             <tr>
@@ -105,52 +107,67 @@
             
             <!-- 每日数据提交页面 -->
             <section id="daily-entry" class="page">
-                <h2>每日数据提交</h2>
+                <h2><i class="fas fa-edit"></i> 每日数据录入</h2>
                 <div class="form-container">
                     <form id="entryForm">
                         <div class="form-group">
-                            <label for="entryDate">日期:</label>
+                            <label for="entryDate"><i class="fas fa-calendar"></i> 日期 *:</label>
                             <input type="date" id="entryDate" required>
                         </div>
                         <div class="form-group">
-                            <label for="entryType">类型:</label>
+                            <label for="entryType"><i class="fas fa-tags"></i> 类型 *:</label>
                             <select id="entryType" required>
                                 <option value="sale">销售</option>
                                 <option value="purchase">采购</option>
                                 <option value="damage">损耗</option>
+                                <option value="expense">费用支出</option>
                             </select>
                         </div>
-                        <div class="form-group">
-                            <label for="productId">产品:</label>
+                        <div class="form-group" id="productGroup">
+                            <label for="productId"><i class="fas fa-box"></i> 产品 *:</label>
                             <select id="productId" required></select>
                         </div>
-                        <div class="form-group">
-                            <label for="quantity">数量:</label>
+                        <div class="form-group" id="expenseTypeGroup" style="display: none;">
+                            <label for="expenseType"><i class="fas fa-receipt"></i> 费用类型 *:</label>
+                            <select id="expenseType" required>
+                                <option value="">请选择费用类型</option>
+                                <option value="rent">房租</option>
+                                <option value="utilities">水电费</option>
+                                <option value="salary">人工费</option>
+                                <option value="packaging">包装材料</option>
+                                <option value="transport">运输费</option>
+                                <option value="maintenance">设备维护</option>
+                                <option value="marketing">宣传费用</option>
+                                <option value="other">其他费用</option>
+                            </select>
+                        </div>
+                        <div class="form-group" id="quantityGroup">
+                            <label for="quantity"><i class="fas fa-sort-numeric-up"></i> 数量 *:</label>
                             <input type="number" id="quantity" min="1" required>
                         </div>
                         <div class="form-group">
-                            <label for="price">单价 (¥):</label>
+                            <label for="price" id="priceLabel"><i class="fas fa-yen-sign"></i> 单价 (¥) *:</label>
                             <input type="number" id="price" step="0.01" min="0" required>
                         </div>
                         <div class="form-group">
-                            <label for="remark">备注:</label>
-                            <textarea id="remark"></textarea>
+                            <label for="remark"><i class="fas fa-comment"></i> 备注:</label>
+                            <textarea id="remark" placeholder="请输入详细说明..."></textarea>
                         </div>
                         <div class="form-actions">
-                            <button type="submit" class="btn-primary">提交</button>
-                            <button type="reset" class="btn-secondary">重置</button>
+                            <button type="submit" class="btn-primary"><i class="fas fa-check"></i> 提交</button>
+                            <button type="reset" class="btn-secondary"><i class="fas fa-undo"></i> 重置</button>
                         </div>
                     </form>
                 </div>
                 
                 <div class="table-container">
-                    <h3>今日记录</h3>
+                    <h3><i class="fas fa-list"></i> 今日记录</h3>
                     <table id="dailyRecordsTable" class="responsive-table">
                         <thead>
                             <tr>
                                 <th>时间</th>
                                 <th>类型</th>
-                                <th>产品</th>
+                                <th>项目</th>
                                 <th>数量</th>
                                 <th>单价</th>
                                 <th>金额</th>
@@ -165,10 +182,10 @@
             
             <!-- 产品清单页面 -->
             <section id="products" class="page">
-                <h2>产品清单</h2>
+                <h2><i class="fas fa-box"></i> 产品清单</h2>
                 <div class="toolbar">
-                    <input type="text" id="productSearch" placeholder="搜索产品...">
-                    <button id="addProductBtn" class="btn-primary">添加新产品</button>
+                    <input type="text" id="productSearch" placeholder="🔍 搜索产品...">
+                    <button id="addProductBtn" class="btn-primary"><i class="fas fa-plus"></i> 添加新产品</button>
                 </div>
                 
                 <div class="table-container">
@@ -192,15 +209,15 @@
                 <div id="productModal" class="modal">
                     <div class="modal-content">
                         <span class="close">&times;</span>
-                        <h3 id="productModalTitle">添加新产品</h3>
+                        <h3 id="productModalTitle"><i class="fas fa-plus-circle"></i> 添加新产品</h3>
                         <form id="productForm">
                             <input type="hidden" id="productFormId">
                             <div class="form-group">
-                                <label for="productName">产品名称:</label>
+                                <label for="productName"><i class="fas fa-tag"></i> 产品名称:</label>
                                 <input type="text" id="productName" required>
                             </div>
                             <div class="form-group">
-                                <label for="category">类别:</label>
+                                <label for="category"><i class="fas fa-layer-group"></i> 类别:</label>
                                 <select id="category" required>
                                     <option value="糕点">糕点</option>
                                     <option value="月饼">月饼</option>
@@ -210,7 +227,7 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="unit">单位:</label>
+                                <label for="unit"><i class="fas fa-balance-scale"></i> 单位:</label>
                                 <select id="unit" required>
                                     <option value="盒">盒</option>
                                     <option value="个">个</option>
@@ -219,16 +236,16 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="costPrice">参考进价 (¥):</label>
+                                <label for="costPrice"><i class="fas fa-shopping-cart"></i> 参考进价 (¥):</label>
                                 <input type="number" id="costPrice" step="0.01" min="0" required>
                             </div>
                             <div class="form-group">
-                                <label for="salePrice">建议售价 (¥):</label>
+                                <label for="salePrice"><i class="fas fa-money-bill"></i> 建议售价 (¥):</label>
                                 <input type="number" id="salePrice" step="0.01" min="0" required>
                             </div>
                             <div class="form-actions">
-                                <button type="submit" class="btn-primary">保存</button>
-                                <button type="button" class="btn-secondary" onclick="closeProductModal()">取消</button>
+                                <button type="submit" class="btn-primary"><i class="fas fa-save"></i> 保存</button>
+                                <button type="button" class="btn-secondary" onclick="closeProductModal()"><i class="fas fa-times"></i> 取消</button>
                             </div>
                         </form>
                     </div>
@@ -237,10 +254,10 @@
             
             <!-- 库存管理页面 -->
             <section id="inventory" class="page">
-                <h2>库存管理</h2>
+                <h2><i class="fas fa-warehouse"></i> 库存管理</h2>
                 <div class="toolbar">
-                    <input type="text" id="inventorySearch" placeholder="搜索商品...">
-                    <button id="adjustInventoryBtn" class="btn-primary">调整库存</button>
+                    <input type="text" id="inventorySearch" placeholder="🔍 搜索商品...">
+                    <button id="adjustInventoryBtn" class="btn-primary"><i class="fas fa-edit"></i> 调整库存</button>
                 </div>
                 
                 <div class="table-container">
@@ -250,9 +267,11 @@
                                 <th>商品名称</th>
                                 <th>分类</th>
                                 <th>当前库存</th>
+                                <th>单位</th>
                                 <th>平均成本</th>
                                 <th>库存价值</th>
                                 <th>状态</th>
+                                <th>最后更新</th>
                                 <th>操作</th>
                             </tr>
                         </thead>
@@ -264,18 +283,18 @@
                 <div id="inventoryModal" class="modal">
                     <div class="modal-content">
                         <span class="close">&times;</span>
-                        <h3>调整库存</h3>
+                        <h3><i class="fas fa-edit"></i> 调整库存</h3>
                         <form id="inventoryForm">
                             <div class="form-group">
-                                <label for="inventoryProductId">商品:</label>
+                                <label for="inventoryProductId"><i class="fas fa-box"></i> 商品:</label>
                                 <select id="inventoryProductId" required></select>
                             </div>
                             <div class="form-group">
-                                <label>当前库存:</label>
+                                <label><i class="fas fa-cubes"></i> 当前库存:</label>
                                 <div id="currentStock" class="current-stock-display">0</div>
                             </div>
                             <div class="form-group">
-                                <label for="adjustmentType">调整类型:</label>
+                                <label for="adjustmentType"><i class="fas fa-cogs"></i> 调整类型:</label>
                                 <select id="adjustmentType" required>
                                     <option value="add">增加库存</option>
                                     <option value="subtract">减少库存</option>
@@ -283,16 +302,16 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="adjustmentQuantity">数量:</label>
+                                <label for="adjustmentQuantity"><i class="fas fa-sort-numeric-up"></i> 数量:</label>
                                 <input type="number" id="adjustmentQuantity" min="0" required>
                             </div>
                             <div class="form-group">
-                                <label for="adjustmentReason">调整原因:</label>
+                                <label for="adjustmentReason"><i class="fas fa-comment"></i> 调整原因:</label>
                                 <textarea id="adjustmentReason" placeholder="请输入调整原因..."></textarea>
                             </div>
                             <div class="form-actions">
-                                <button type="submit" class="btn-primary">确认调整</button>
-                                <button type="button" class="btn-secondary" onclick="closeInventoryModal()">取消</button>
+                                <button type="submit" class="btn-primary"><i class="fas fa-check"></i> 确认调整</button>
+                                <button type="button" class="btn-secondary" onclick="closeInventoryModal()"><i class="fas fa-times"></i> 取消</button>
                             </div>
                         </form>
                     </div>
@@ -301,28 +320,28 @@
             
             <!-- 销售管理页面 -->
             <section id="sales" class="page">
-                <h2>销售管理</h2>
+                <h2><i class="fas fa-chart-line"></i> 销售管理</h2>
                 <div class="toolbar">
                     <div class="date-filter">
-                        <label for="salesStartDate">开始日期:</label>
+                        <label for="salesStartDate"><i class="fas fa-calendar-alt"></i> 开始日期:</label>
                         <input type="date" id="salesStartDate">
-                        <label for="salesEndDate">结束日期:</label>
+                        <label for="salesEndDate"><i class="fas fa-calendar-alt"></i> 结束日期:</label>
                         <input type="date" id="salesEndDate">
-                        <button id="filterSalesBtn" class="btn-primary">筛选</button>
+                        <button id="filterSalesBtn" class="btn-primary"><i class="fas fa-filter"></i> 筛选</button>
                     </div>
                 </div>
                 
                 <div class="sales-summary">
                     <div class="summary-card">
-                        <h4>总销售额</h4>
+                        <h4><i class="fas fa-money-bill-wave"></i> 总销售额</h4>
                         <div id="totalSalesAmount" class="summary-value">¥0.00</div>
                     </div>
                     <div class="summary-card">
-                        <h4>销售笔数</h4>
+                        <h4><i class="fas fa-shopping-bag"></i> 销售笔数</h4>
                         <div id="totalSalesCount" class="summary-value">0</div>
                     </div>
                     <div class="summary-card">
-                        <h4>平均客单价</h4>
+                        <h4><i class="fas fa-calculator"></i> 平均客单价</h4>
                         <div id="avgOrderValue" class="summary-value">¥0.00</div>
                     </div>
                 </div>
@@ -346,39 +365,39 @@
             
             <!-- 财务管理页面 -->
             <section id="finance" class="page">
-                <h2>财务管理</h2>
+                <h2><i class="fas fa-coins"></i> 财务管理</h2>
                 <div class="toolbar">
                     <div class="month-filter">
-                        <label for="financeMonth">选择月份:</label>
+                        <label for="financeMonth"><i class="fas fa-calendar"></i> 选择月份:</label>
                         <input type="month" id="financeMonth">
-                        <button id="filterFinanceBtn" class="btn-primary">查看</button>
+                        <button id="filterFinanceBtn" class="btn-primary"><i class="fas fa-eye"></i> 查看</button>
                     </div>
                 </div>
                 
                 <div class="finance-summary">
                     <div class="summary-card income">
-                        <h4>本月收入</h4>
+                        <h4><i class="fas fa-arrow-up text-success"></i> 本月收入</h4>
                         <div id="monthlyIncome" class="summary-value">¥0.00</div>
                     </div>
                     <div class="summary-card expense">
-                        <h4>本月支出</h4>
+                        <h4><i class="fas fa-arrow-down text-danger"></i> 本月支出</h4>
                         <div id="monthlyExpense" class="summary-value">¥0.00</div>
                     </div>
                     <div class="summary-card profit">
-                        <h4>本月利润</h4>
+                        <h4><i class="fas fa-chart-pie"></i> 本月利润</h4>
                         <div id="monthlyProfit" class="summary-value">¥0.00</div>
                     </div>
                 </div>
                 
                 <div class="charts-container">
                     <div class="chart-box">
-                        <h3>收支趋势</h3>
+                        <h3><i class="fas fa-chart-area"></i> 收支趋势</h3>
                         <canvas id="financeChart"></canvas>
                     </div>
                 </div>
                 
                 <div class="table-container">
-                    <h3>财务明细</h3>
+                    <h3><i class="fas fa-list-alt"></i> 财务明细</h3>
                     <table id="financeTable" class="responsive-table">
                         <thead>
                             <tr>
@@ -398,28 +417,45 @@
             
             <!-- 报表分析页面 -->
             <section id="reports" class="page">
-                <h2>报表分析</h2>
+                <h2><i class="fas fa-chart-bar"></i> 报表分析</h2>
                 <div class="toolbar">
                     <div class="report-filter">
-                        <label for="reportType">报表类型:</label>
+                        <label for="reportType"><i class="fas fa-file-alt"></i> 报表类型:</label>
                         <select id="reportType">
                             <option value="daily">日报</option>
                             <option value="monthly">月报</option>
                         </select>
-                        <label for="reportDateRange">日期:</label>
+                        <label for="reportDateRange"><i class="fas fa-calendar"></i> 日期:</label>
                         <input type="date" id="reportDateRange">
-                        <button id="generateReportBtn" class="btn-primary">生成报表</button>
+                        <button id="generateReportBtn" class="btn-primary"><i class="fas fa-cog"></i> 生成报表</button>
                     </div>
                 </div>
                 
                 <div id="reportContent" class="report-content">
-                    <!-- 报表内容将通过JavaScript动态生成 -->
+                    <!-- 报表图表 -->
+                    <div class="chart-box">
+                        <h3 id="reportChartTitle"><i class="fas fa-chart-pie"></i> 报表图表</h3>
+                        <canvas id="reportChart"></canvas>
+                    </div>
+                    
+                    <!-- 报表表格 -->
+                    <div class="table-container">
+                        <h3 id="reportTableTitle"><i class="fas fa-table"></i> 报表数据</h3>
+                        <table id="reportTable" class="responsive-table">
+                            <thead id="reportTableHead">
+                                <!-- 表头将通过JavaScript动态生成 -->
+                            </thead>
+                            <tbody id="reportTableBody">
+                                <!-- 表格数据将通过JavaScript动态生成 -->
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </section>
             
             <!-- 使用说明页面 -->
             <section id="help" class="page">
-                <h2>使用说明</h2>
+                <h2><i class="fas fa-question-circle"></i> 使用说明</h2>
                 <div class="help-container">
                     <div class="help-section">
                         <h3>系统概述</h3>
