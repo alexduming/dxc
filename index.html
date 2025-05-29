@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>稻香村库存管理系统</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Chart.js 库 - 使用本地文件确保稳定性 -->
+    <script src="chart.min.js"></script>
+    <!-- 检查Chart.js加载状态 -->
+    <script>
+        window.addEventListener('load', function() {
+            if (typeof Chart !== 'undefined') {
+                console.log('Chart.js加载成功，版本:', Chart.version);
+            } else {
+                console.error('Chart.js加载失败');
+                alert('图表库加载失败，部分功能可能无法正常使用。');
+            }
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>稻香村库存管理系统</h1>
+            <div id="currentDate" class="date-display"></div>
+        </header>
+        
+        <nav>
+            <ul>
+                <li><a href="#dashboard" class="active">首页仪表盘</a></li>
+                <li><a href="#products">商品管理</a></li>
+                <li><a href="#inventory">库存管理</a></li>
+                <li><a href="#daily-entry">每日数据录入</a></li>
+                <li><a href="#sales">销售管理</a></li>
+                <li><a href="#finance">财务管理</a></li>
+                <li><a href="#reports">报表分析</a></li>
+                <li><a href="#help">使用说明</a></li>
+            </ul>
+        </nav>
+        
+        <main>
+            <!-- 仪表盘页面 -->
+            <div id="dashboard" class="page active">
+                <h2>首页仪表盘</h2>
+                
+                <div class="dashboard-cards">
+                    <div class="card">
+                        <h3>今日销售额</h3>
+                        <div id="todaySales" class="card-value">¥0.00</div>
+                    </div>
+                    <div class="card">
+                        <h3>本月销售额</h3>
+                        <div id="monthSales" class="card-value">¥0.00</div>
+                    </div>
+                    <div class="card">
+                        <h3>商品总数</h3>
+                        <div id="totalProducts" class="card-value">0</div>
+                    </div>
+                    <div class="card">
+                        <h3>库存总价值</h3>
+                        <div id="inventoryValue" class="card-value">¥0.00</div>
+                    </div>
+                </div>
+                
+                <!-- 快捷操作区域 -->
+                <div class="quick-actions">
+                    <h3>快捷操作</h3>
+                    <div class="quick-actions-buttons">
+                        <button id="quick-enter-sales" class="btn-primary">录入今日销售</button>
+                        <button id="quick-check-inventory" class="btn-primary">查看库存状态</button>
+                        <button id="quick-add-product" class="btn-primary">添加新商品</button>
+                        <button id="quick-generate-report" class="btn-primary">生成今日报表</button>
+                    </div>
+                </div>
+                
+                <div class="charts-container">
+                    <div class="chart-box">
+                        <h3>销售趋势</h3>
+                        <canvas id="salesTrendChart"></canvas>
+                    </div>
+                    <div class="chart-box">
+                        <h3>热销商品</h3>
+                        <canvas id="topProductsChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="table-container">
+                    <h3>库存预警</h3>
+                    <table id="lowStockTable" class="responsive-table">
+                        <thead>
+                            <tr>
+                                <th>商品名称</th>
+                                <th>分类</th>
+                                <th>当前库存</th>
+                                <th>状态</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- 库存预警数据会通过JavaScript动态生成 -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- 每日数据提交页面 -->
+            <section id="daily-entry" class="page">
+                <h2>每日数据提交</h2>
+                <div class="form-container">
+                    <form id="entryForm">
+                        <div class="form-group">
+                            <label for="entryDate">日期:</label>
+                            <input type="date" id="entryDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="entryType">类型:</label>
+                            <select id="entryType" required>
+                                <option value="sale">销售</option>
+                                <option value="purchase">采购</option>
+                                <option value="damage">损耗</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="productId">产品:</label>
+                            <select id="productId" required></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="quantity">数量:</label>
+                            <input type="number" id="quantity" min="1" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="price">单价 (¥):</label>
+                            <input type="number" id="price" step="0.01" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="remark">备注:</label>
+                            <textarea id="remark"></textarea>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn-primary">提交</button>
+                            <button type="reset" class="btn-secondary">重置</button>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="table-container">
+                    <h3>今日记录</h3>
+                    <table id="dailyRecordsTable" class="responsive-table">
+                        <thead>
+                            <tr>
+                                <th>时间</th>
+                                <th>类型</th>
+                                <th>产品</th>
+                                <th>数量</th>
+                                <th>单价</th>
+                                <th>金额</th>
+                                <th>备注</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dailyRecordsList"></tbody>
+                    </table>
+                </div>
+            </section>
+            
+            <!-- 产品清单页面 -->
+            <section id="products" class="page">
+                <h2>产品清单</h2>
+                <div class="toolbar">
+                    <input type="text" id="productSearch" placeholder="搜索产品...">
+                    <button id="addProductBtn" class="btn-primary">添加新产品</button>
+                </div>
+                
+                <div class="table-container">
+                    <table id="productsTable" class="responsive-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>产品名称</th>
+                                <th>类别</th>
+                                <th>单位</th>
+                                <th>参考进价</th>
+                                <th>建议售价</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="productsList"></tbody>
+                    </table>
+                </div>
+                
+                <!-- 产品表单模态框 -->
+                <div id="productModal" class="modal">
+                    <div class="modal-content">
+                        <span class="close">&times;</span>
+                        <h3 id="productModalTitle">添加新产品</h3>
+                        <form id="productForm">
+                            <input type="hidden" id="productFormId">
+                            <div class="form-group">
+                                <label for="productName">产品名称:</label>
+                                <input type="text" id="productName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="category">类别:</label>
+                                <select id="category" required>
+                                    <option value="糕点">糕点</option>
+                                    <option value="月饼">月饼</option>
+                                    <option value="饼干">饼干</option>
+                                    <option value="糖果">糖果</option>
+                                    <option value="其他">其他</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="unit">单位:</label>
+                                <select id="unit" required>
+                                    <option value="盒">盒</option>
+                                    <option value="个">个</option>
+                                    <option value="斤">斤</option>
+                                    <option value="包">包</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="costPrice">参考进价 (¥):</label>
+                                <input type="number" id="costPrice" step="0.01" min="0" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="salePrice">建议售价 (¥):</label>
+                                <input type="number" id="salePrice" step="0.01" min="0" required>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn-primary">保存</button>
+                                <button type="button" class="btn-secondary" onclick="closeProductModal()">取消</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- 库存管理页面 -->
+            <section id="inventory" class="page">
+                <h2>库存管理</h2>
+                <div class="toolbar">
+                    <input type="text" id="inventorySearch" placeholder="搜索商品...">
+                    <button id="adjustInventoryBtn" class="btn-primary">调整库存</button>
+                </div>
+                
+                <div class="table-container">
+                    <table id="inventoryTable" class="responsive-table">
+                        <thead>
+                            <tr>
+                                <th>商品名称</th>
+                                <th>分类</th>
+                                <th>当前库存</th>
+                                <th>平均成本</th>
+                                <th>库存价值</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inventoryList"></tbody>
+                    </table>
+                </div>
+                
+                <!-- 库存调整模态框 -->
+                <div id="inventoryModal" class="modal">
+                    <div class="modal-content">
+                        <span class="close">&times;</span>
+                        <h3>调整库存</h3>
+                        <form id="inventoryForm">
+                            <div class="form-group">
+                                <label for="inventoryProductId">商品:</label>
+                                <select id="inventoryProductId" required></select>
+                            </div>
+                            <div class="form-group">
+                                <label>当前库存:</label>
+                                <div id="currentStock" class="current-stock-display">0</div>
+                            </div>
+                            <div class="form-group">
+                                <label for="adjustmentType">调整类型:</label>
+                                <select id="adjustmentType" required>
+                                    <option value="add">增加库存</option>
+                                    <option value="subtract">减少库存</option>
+                                    <option value="set">设置库存</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="adjustmentQuantity">数量:</label>
+                                <input type="number" id="adjustmentQuantity" min="0" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="adjustmentReason">调整原因:</label>
+                                <textarea id="adjustmentReason" placeholder="请输入调整原因..."></textarea>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn-primary">确认调整</button>
+                                <button type="button" class="btn-secondary" onclick="closeInventoryModal()">取消</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- 销售管理页面 -->
+            <section id="sales" class="page">
+                <h2>销售管理</h2>
+                <div class="toolbar">
+                    <div class="date-filter">
+                        <label for="salesStartDate">开始日期:</label>
+                        <input type="date" id="salesStartDate">
+                        <label for="salesEndDate">结束日期:</label>
+                        <input type="date" id="salesEndDate">
+                        <button id="filterSalesBtn" class="btn-primary">筛选</button>
+                    </div>
+                </div>
+                
+                <div class="sales-summary">
+                    <div class="summary-card">
+                        <h4>总销售额</h4>
+                        <div id="totalSalesAmount" class="summary-value">¥0.00</div>
+                    </div>
+                    <div class="summary-card">
+                        <h4>销售笔数</h4>
+                        <div id="totalSalesCount" class="summary-value">0</div>
+                    </div>
+                    <div class="summary-card">
+                        <h4>平均客单价</h4>
+                        <div id="avgOrderValue" class="summary-value">¥0.00</div>
+                    </div>
+                </div>
+                
+                <div class="table-container">
+                    <table id="salesTable" class="responsive-table">
+                        <thead>
+                            <tr>
+                                <th>日期</th>
+                                <th>商品</th>
+                                <th>数量</th>
+                                <th>单价</th>
+                                <th>金额</th>
+                                <th>备注</th>
+                            </tr>
+                        </thead>
+                        <tbody id="salesList"></tbody>
+                    </table>
+                </div>
+            </section>
+            
+            <!-- 财务管理页面 -->
+            <section id="finance" class="page">
+                <h2>财务管理</h2>
+                <div class="toolbar">
+                    <div class="month-filter">
+                        <label for="financeMonth">选择月份:</label>
+                        <input type="month" id="financeMonth">
+                        <button id="filterFinanceBtn" class="btn-primary">查看</button>
+                    </div>
+                </div>
+                
+                <div class="finance-summary">
+                    <div class="summary-card income">
+                        <h4>本月收入</h4>
+                        <div id="monthlyIncome" class="summary-value">¥0.00</div>
+                    </div>
+                    <div class="summary-card expense">
+                        <h4>本月支出</h4>
+                        <div id="monthlyExpense" class="summary-value">¥0.00</div>
+                    </div>
+                    <div class="summary-card profit">
+                        <h4>本月利润</h4>
+                        <div id="monthlyProfit" class="summary-value">¥0.00</div>
+                    </div>
+                </div>
+                
+                <div class="charts-container">
+                    <div class="chart-box">
+                        <h3>收支趋势</h3>
+                        <canvas id="financeChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="table-container">
+                    <h3>财务明细</h3>
+                    <table id="financeTable" class="responsive-table">
+                        <thead>
+                            <tr>
+                                <th>日期</th>
+                                <th>类型</th>
+                                <th>商品</th>
+                                <th>数量</th>
+                                <th>单价</th>
+                                <th>金额</th>
+                                <th>备注</th>
+                            </tr>
+                        </thead>
+                        <tbody id="financeList"></tbody>
+                    </table>
+                </div>
+            </section>
+            
+            <!-- 报表分析页面 -->
+            <section id="reports" class="page">
+                <h2>报表分析</h2>
+                <div class="toolbar">
+                    <div class="report-filter">
+                        <label for="reportType">报表类型:</label>
+                        <select id="reportType">
+                            <option value="daily">日报</option>
+                            <option value="monthly">月报</option>
+                        </select>
+                        <label for="reportDateRange">日期:</label>
+                        <input type="date" id="reportDateRange">
+                        <button id="generateReportBtn" class="btn-primary">生成报表</button>
+                    </div>
+                </div>
+                
+                <div id="reportContent" class="report-content">
+                    <!-- 报表内容将通过JavaScript动态生成 -->
+                </div>
+            </section>
+            
+            <!-- 使用说明页面 -->
+            <section id="help" class="page">
+                <h2>使用说明</h2>
+                <div class="help-container">
+                    <div class="help-section">
+                        <h3>系统概述</h3>
+                        <p>稻香村库存管理系统是一个专为传统糕点店设计的综合管理平台，帮助您高效管理商品、库存、销售和财务数据。</p>
+                        
+                        <h4>主要功能模块：</h4>
+                        <ul>
+                            <li><strong>首页仪表盘</strong> - 查看关键业务指标和快捷操作</li>
+                            <li><strong>商品管理</strong> - 添加、编辑和管理商品信息</li>
+                            <li><strong>库存管理</strong> - 实时监控库存状态，进行库存调整</li>
+                            <li><strong>每日数据录入</strong> - 记录销售、采购和损耗数据</li>
+                            <li><strong>销售管理</strong> - 查看和分析销售记录</li>
+                            <li><strong>财务管理</strong> - 跟踪收支情况和利润分析</li>
+                            <li><strong>报表分析</strong> - 生成各类业务报表</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="help-section">
+                        <h3>日常操作流程</h3>
+                        <div class="help-steps">
+                            <div class="step">
+                                <h4>1. 每日开始</h4>
+                                <p>打开系统，查看首页仪表盘了解昨日业务情况和今日库存状态。</p>
+                            </div>
+                            <div class="step">
+                                <h4>2. 录入销售数据</h4>
+                                <p>使用"每日数据录入"功能，及时记录每笔销售、采购和损耗。</p>
+                            </div>
+                            <div class="step">
+                                <h4>3. 监控库存</h4>
+                                <p>定期检查"库存管理"页面，关注库存预警，及时补货。</p>
+                            </div>
+                            <div class="step">
+                                <h4>4. 分析报表</h4>
+                                <p>每日结束时生成日报，每月生成月报，分析经营状况。</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="help-section">
+                        <h3>功能详解</h3>
+                        <div class="help-feature">
+                            <h4>快捷操作</h4>
+                            <p>首页提供四个快捷按钮，可以快速进入常用功能：</p>
+                            <ul>
+                                <li>录入今日销售 - 直接跳转到销售录入</li>
+                                <li>查看库存状态 - 查看当前库存情况</li>
+                                <li>添加新商品 - 快速添加新产品</li>
+                                <li>生成今日报表 - 生成当日经营报表</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="help-feature">
+                            <h4>商品管理</h4>
+                            <p>支持添加、编辑、删除商品信息，包括商品名称、分类、单位、进价和售价。系统预设了糕点、月饼、饼干、糖果等常见分类。</p>
+                        </div>
+                        
+                        <div class="help-feature">
+                            <h4>库存管理</h4>
+                            <p>实时显示每个商品的库存数量、平均成本和库存价值。支持手动调整库存，系统会自动记录调整原因。</p>
+                        </div>
+                        
+                        <div class="help-feature">
+                            <h4>数据录入</h4>
+                            <p>支持三种类型的数据录入：销售（减少库存）、采购（增加库存）、损耗（减少库存）。系统会自动更新库存和财务数据。</p>
+                        </div>
+                        
+                        <div class="help-feature">
+                            <h4>销售分析</h4>
+                            <p>提供销售趋势图表、热销商品排行、销售汇总等功能，帮助您了解销售情况和商品表现。</p>
+                        </div>
+                        
+                        <div class="help-feature">
+                            <h4>财务管理</h4>
+                            <p>自动计算月度收入、支出和利润，提供收支趋势图表和详细的财务明细记录。</p>
+                        </div>
+                        
+                        <div class="help-feature">
+                            <h4>报表功能</h4>
+                            <p>支持生成日报和月报，包含销售汇总、库存状态、财务分析等关键信息，便于经营决策。</p>
+                        </div>
+                    </div>
+                    
+                    <div class="help-section">
+                        <h3>常见问题</h3>
+                        <div class="help-faq">
+                            <h4>Q: 数据会丢失吗？</h4>
+                            <p>A: 所有数据都保存在浏览器本地存储中，只要不清除浏览器数据，信息就会一直保留。建议定期导出重要数据作为备份。</p>
+                            
+                            <h4>Q: 如何添加新的商品分类？</h4>
+                            <p>A: 目前系统预设了常见分类，如需添加新分类，可以在添加商品时选择"其他"分类，或联系技术支持进行定制。</p>
+                            
+                            <h4>Q: 库存数据不准确怎么办？</h4>
+                            <p>A: 可以使用"库存管理"页面的"调整库存"功能，选择"设置库存"来直接修正库存数量。</p>
+                            
+                            <h4>Q: 如何查看历史数据？</h4>
+                            <p>A: 在"销售管理"和"财务管理"页面可以按日期筛选查看历史记录，"报表分析"可以生成指定时间段的汇总报表。</p>
+                        </div>
+                    </div>
+                    
+                    <div class="help-section">
+                        <h3>使用技巧</h3>
+                        <ul>
+                            <li>建议每天固定时间录入数据，保持数据的及时性和准确性</li>
+                            <li>定期查看库存预警，避免缺货影响销售</li>
+                            <li>利用销售趋势图表分析客户购买习惯，优化商品结构</li>
+                            <li>每月生成月报，分析经营状况，制定下月经营策略</li>
+                            <li>重要数据建议截图保存，作为经营记录的补充</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html> 
