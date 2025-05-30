@@ -73,6 +73,37 @@ function safeCreateChart(canvasId, config, chartName) {
         return null;
     }
     
+    // 设置图表默认颜色方案 - 哆啦A梦主题
+    Chart.defaults.color = '#333333';
+    Chart.defaults.borderColor = '#E0E0E0';
+    
+    // 哆啦A梦主题调色板
+    const doraemonColors = [
+        '#1E90FF', // 蓝色 - 哆啦A梦的主色
+        '#FFCC00', // 黄色 - 铃铛
+        '#00b894', // 青绿色
+        '#8c54ff', // 紫色
+        '#64b5f6', // 浅蓝色
+        '#fff176', // 浅黄色
+        '#4dd0e1', // 浅青色
+        '#a5d6a7', // 浅绿色
+        '#90caf9', // 淡蓝色
+        '#ce93d8'  // 淡紫色
+    ];
+    
+    // 对线条和柱状图应用哆啦A梦配色
+    if (config.data && config.data.datasets) {
+        config.data.datasets.forEach((dataset, index) => {
+            // 如果没有明确设置颜色，使用主题色
+            if (!dataset.backgroundColor) {
+                dataset.backgroundColor = doraemonColors[index % doraemonColors.length];
+            }
+            if (!dataset.borderColor && dataset.type !== 'pie' && dataset.type !== 'doughnut') {
+                dataset.borderColor = doraemonColors[index % doraemonColors.length];
+            }
+        });
+    }
+    
     try {
         const chart = new Chart(canvas, config);
         console.log(`${chartName} 创建成功`);
@@ -92,7 +123,9 @@ function initializeProducts() {
                               window.location.hostname.includes('netlify.app');
     
     // 强制重新初始化数据（用于测试和在线部署）
-    const forceReset = isOnlineDeployment; // 在线部署时强制重置
+    const forceReset = isOnlineDeployment || 
+                      localStorage.getItem('forceDoraemonReset') === 'true' || 
+                      !localStorage.getItem('productsInitialized'); // 检查是否已初始化
     
     let products = Store.get('products', []);
     
@@ -100,29 +133,45 @@ function initializeProducts() {
     if (products.length === 0 || forceReset) {
         console.log(isOnlineDeployment ? '检测到在线部署环境，强制初始化模拟数据' : '本地环境初始化数据');
         
+        // 清除重置标记
+        localStorage.removeItem('forceDoraemonReset');
+        
         products = [
-            { id: 1, name: '传统月饼', category: '月饼', unit: '盒', costPrice: 40, sellPrice: 68 },
-            { id: 2, name: '豆沙糕点', category: '糕点', unit: '袋', costPrice: 15, sellPrice: 25 },
-            { id: 3, name: '桃酥饼干', category: '饼干', unit: '盒', costPrice: 12, sellPrice: 20 },
-            { id: 4, name: '椰丝糕', category: '糕点', unit: '个', costPrice: 5, sellPrice: 8 },
-            { id: 5, name: '花生酥', category: '糕点', unit: '盒', costPrice: 18, sellPrice: 30 },
-            { id: 6, name: '绿豆糕', category: '糕点', unit: '盒', costPrice: 16, sellPrice: 28 },
-            { id: 7, name: '蛋黄酥', category: '糕点', unit: '个', costPrice: 6, sellPrice: 10 },
-            { id: 8, name: '水果糖', category: '糖果', unit: '袋', costPrice: 8, sellPrice: 15 },
-            { id: 9, name: '五仁月饼', category: '月饼', unit: '个', costPrice: 8, sellPrice: 12 },
-            { id: 10, name: '奶黄月饼', category: '月饼', unit: '个', costPrice: 10, sellPrice: 15 },
-            { id: 11, name: '凤梨酥', category: '糕点', unit: '盒', costPrice: 35, sellPrice: 58 },
-            { id: 12, name: '红豆酥', category: '糕点', unit: '个', costPrice: 4, sellPrice: 7 },
-            { id: 13, name: '龙舟糕', category: '糕点', unit: '盒', costPrice: 22, sellPrice: 36 },
-            { id: 14, name: '粽子礼盒', category: '节日食品', unit: '盒', costPrice: 45, sellPrice: 68 },
-            { id: 15, name: '绿茶酥', category: '糕点', unit: '盒', costPrice: 28, sellPrice: 45 },
-            { id: 16, name: '芝麻酥', category: '糕点', unit: '盒', costPrice: 20, sellPrice: 32 },
-            { id: 17, name: '核桃酥', category: '糕点', unit: '盒', costPrice: 25, sellPrice: 40 },
-            { id: 18, name: '莲蓉月饼', category: '月饼', unit: '个', costPrice: 12, sellPrice: 18 },
-            { id: 19, name: '红枣糕', category: '糕点', unit: '盒', costPrice: 18, sellPrice: 30 },
-            { id: 20, name: '山楂糕', category: '糕点', unit: '盒', costPrice: 15, sellPrice: 25 }
+            { id: 1, name: '竹蜻蜓', category: '飞行道具', unit: '个', costPrice: 350, sellPrice: 699 },
+            { id: 2, name: '任意门', category: '空间道具', unit: '个', costPrice: 650, sellPrice: 1299 },
+            { id: 3, name: '时光机', category: '时间道具', unit: '台', costPrice: 880, sellPrice: 1699 },
+            { id: 4, name: '四次元口袋', category: '空间道具', unit: '个', costPrice: 1200, sellPrice: 2499 },
+            { id: 5, name: '记忆面包', category: '学习道具', unit: '片', costPrice: 25, sellPrice: 49 },
+            { id: 6, name: '翻译蒟蒻', category: '语言道具', unit: '个', costPrice: 45, sellPrice: 89 },
+            { id: 7, name: '如意电话亭', category: '通讯道具', unit: '个', costPrice: 170, sellPrice: 349 },
+            { id: 8, name: '缩小灯', category: '变形道具', unit: '个', costPrice: 120, sellPrice: 249 },
+            { id: 9, name: '透明斗篷', category: '隐身道具', unit: '件', costPrice: 250, sellPrice: 499 },
+            { id: 10, name: '穿透环', category: '空间道具', unit: '对', costPrice: 85, sellPrice: 169 },
+            { id: 11, name: '石头帽', category: '防护道具', unit: '顶', costPrice: 65, sellPrice: 129 },
+            { id: 12, name: '透视眼镜', category: '视觉道具', unit: '副', costPrice: 95, sellPrice: 199 },
+            { id: 13, name: '空气炮', category: '武器道具', unit: '个', costPrice: 110, sellPrice: 219 },
+            { id: 14, name: '钻地洞', category: '空间道具', unit: '个', costPrice: 140, sellPrice: 279 },
+            { id: 15, name: '时间布', category: '时间道具', unit: '块', costPrice: 230, sellPrice: 459 },
+            { id: 16, name: '速度光线枪', category: '速度道具', unit: '把', costPrice: 320, sellPrice: 639 },
+            { id: 17, name: '变声糖', category: '变形道具', unit: '盒', costPrice: 40, sellPrice: 79 },
+            { id: 18, name: '梦境摄影机', category: '影像道具', unit: '台', costPrice: 260, sellPrice: 529 },
+            { id: 19, name: '气象棒', category: '气象道具', unit: '根', costPrice: 130, sellPrice: 259 },
+            { id: 20, name: '超能力手套', category: '超能力道具', unit: '对', costPrice: 180, sellPrice: 369 },
+            { id: 21, name: '友谊纽扣', category: '情感道具', unit: '对', costPrice: 60, sellPrice: 119 },
+            { id: 22, name: '记忆气球', category: '记忆道具', unit: '个', costPrice: 90, sellPrice: 179 },
+            { id: 23, name: '遗忘草', category: '记忆道具', unit: '株', costPrice: 75, sellPrice: 149 },
+            { id: 24, name: '对话糖', category: '语言道具', unit: '盒', costPrice: 55, sellPrice: 109 },
+            { id: 25, name: '增强饼干', category: '力量道具', unit: '盒', costPrice: 85, sellPrice: 169 },
+            { id: 26, name: '如果电话亭', category: '空间道具', unit: '个', costPrice: 420, sellPrice: 839 },
+            { id: 27, name: '倒霉棒', category: '命运道具', unit: '根', costPrice: 70, sellPrice: 139 },
+            { id: 28, name: '传送门', category: '空间道具', unit: '个', costPrice: 380, sellPrice: 759 },
+            { id: 29, name: '复制镜', category: '复制道具', unit: '面', costPrice: 290, sellPrice: 579 },
+            { id: 30, name: '绝对安全帽', category: '防护道具', unit: '顶', costPrice: 150, sellPrice: 299 }
         ];
         Store.set('products', products);
+        
+        // 标记已初始化
+        localStorage.setItem('productsInitialized', 'true');
         
         // 初始化库存数据
         const inventory = products.map(product => {
@@ -139,7 +188,7 @@ function initializeProducts() {
         const transactions = generateMayTransactions(products);
         Store.set('transactions', transactions);
         
-        console.log('✅ 已初始化20个产品和完整模拟数据');
+        console.log('✅ 已初始化30个产品和完整模拟数据');
         console.log('📦 产品数量:', products.length);
         console.log('📊 交易记录数量:', transactions.length);
         console.log('🏪 库存记录数量:', inventory.length);
@@ -192,7 +241,7 @@ function generateMayTransactions(products) {
                 productId: randomProduct.id,
                 quantity: randomQuantity,
                 price: randomProduct.sellPrice,
-                remark: isWeekend ? '周末销售' : '日常销售'
+                remark: isWeekend ? '周末促销' : '日常销售'
             });
         }
         
@@ -209,7 +258,7 @@ function generateMayTransactions(products) {
                 productId: randomProduct.id,
                 quantity: Math.floor(Math.random() * 2) + 1,
                 price: randomProduct.costPrice,
-                remark: '过期损耗'
+                remark: '展示损耗'
             });
         }
     }
@@ -401,134 +450,160 @@ function updateDashboardCards() {
 
 // 渲染销售趋势图表
 function renderSalesTrendChart() {
-    console.log('开始渲染销售趋势图表...');
-    
-    // 检查 Chart.js 是否已加载
     if (typeof Chart === 'undefined') {
-        console.warn('Chart.js 未加载，无法创建销售趋势图表');
+        console.warn('Chart.js尚未加载，无法渲染销售趋势图表');
         return;
     }
     
-    // 检查画布元素是否存在
-    const ctx = document.getElementById('salesTrendChart');
-    if (!ctx) {
-        console.error('找不到销售趋势图表画布元素');
-        return;
-    }
-    
-    const transactions = Store.get('transactions', []);
-    console.log(`获取到 ${transactions.length} 条交易记录`);
-    
-    // 获取过去7天的日期
-    const dates = [];
-    const salesByDay = {};
-    
-    for (let i = 6; i >= 0; i--) {
-        const date = new Date();
-        date.setDate(date.getDate() - i);
-        const dateStr = Utils.formatDate(date);
-        dates.push(dateStr);
-        salesByDay[dateStr] = 0;
-    }
-    
-    // 计算每天的销售额
-    const salesTransactions = transactions.filter(t => t.type === 'sale' && dates.includes(Utils.formatDate(t.date)));
-    console.log(`过去7天的销售记录: ${salesTransactions.length} 条`);
-    
-    salesTransactions.forEach(t => {
-        const dateStr = Utils.formatDate(t.date);
-        salesByDay[dateStr] += t.price * t.quantity;
-    });
-    
-    // 准备图表数据
-    const salesData = dates.map(date => salesByDay[date]);
-    const formattedDates = dates.map(date => {
-        const d = new Date(date);
-        return `${d.getMonth() + 1}月${d.getDate()}日`;
-    });
-    
-    console.log('销售数据:', salesData);
-    console.log('日期标签:', formattedDates);
-    
-    // 安全销毁现有图表（如果存在）
-    if (window.salesTrendChart && typeof window.salesTrendChart.destroy === 'function') {
-        try {
-            window.salesTrendChart.destroy();
-            console.log('已销毁现有销售趋势图表');
-        } catch (error) {
-            console.warn('销毁现有图表时出错:', error);
+    try {
+        console.log('尝试渲染销售趋势图表...');
+        
+        // 获取最近15天的数据
+        const transactions = Store.get('transactions', []);
+        const today = new Date();
+        const twoWeeksAgo = new Date(today);
+        twoWeeksAgo.setDate(today.getDate() - 14);
+        
+        // 筛选近15天的销售数据
+        const recentSales = transactions.filter(t => {
+            const transDate = new Date(t.date);
+            return t.type === 'sale' && transDate >= twoWeeksAgo;
+        });
+        
+        // 如果没有足够的数据，生成示例数据
+        let salesByDay = {};
+        let labels = [];
+        
+        if (recentSales.length < 5) {
+            console.log('销售数据不足，生成示例数据');
+            
+            // 生成过去15天的日期标签
+            for (let i = 14; i >= 0; i--) {
+                const date = new Date(today);
+                date.setDate(today.getDate() - i);
+                const dateStr = date.toISOString().split('T')[0];
+                labels.push(dateStr.substring(5)); // 只显示月-日
+                
+                // 生成随机销售额 (1000-8000)
+                salesByDay[dateStr] = Math.floor(Math.random() * 7000) + 1000;
+            }
+        } else {
+            // 处理实际数据
+            console.log('使用实际销售数据');
+            
+            // 获取日期范围
+            for (let i = 14; i >= 0; i--) {
+                const date = new Date(today);
+                date.setDate(today.getDate() - i);
+                const dateStr = date.toISOString().split('T')[0];
+                labels.push(dateStr.substring(5)); // 只显示月-日
+                salesByDay[dateStr] = 0; // 初始化为0
+            }
+            
+            // 计算每天的销售总额
+            recentSales.forEach(sale => {
+                const dateStr = new Date(sale.date).toISOString().split('T')[0];
+                if (salesByDay[dateStr] !== undefined) {
+                    salesByDay[dateStr] += sale.price * sale.quantity;
+                }
+            });
         }
-    }
-    
-    // 图表配置
-    const config = {
-        type: 'line',
-        data: {
-            labels: formattedDates,
-            datasets: [{
-                label: '销售额 (¥)',
-                data: salesData,
-                backgroundColor: 'rgba(194, 51, 47, 0.2)',
-                borderColor: 'rgba(194, 51, 47, 1)',
-                borderWidth: 2,
-                tension: 0.3,
-                fill: true
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false, // 允许图表填满容器
-            interaction: {
-                intersect: false,
-                mode: 'index'
+        
+        // 准备图表数据
+        const salesData = Object.values(salesByDay);
+        
+        // 创建图表配置
+        const config = {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: '日销售额 (¥)',
+                    data: salesData,
+                    backgroundColor: 'rgba(30, 144, 255, 0.2)',  // 哆啦A梦蓝色半透明
+                    borderColor: '#1E90FF',  // 哆啦A梦蓝色
+                    borderWidth: 2,
+                    pointBackgroundColor: '#1E90FF',
+                    pointBorderColor: '#fff',
+                    pointRadius: 4,
+                    pointHoverRadius: 6,
+                    tension: 0.3,
+                    fill: true
+                }]
             },
-            plugins: {
-                legend: {
-                    display: false
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            return Utils.formatCurrency(context.parsed.y);
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
+                        labels: {
+                            font: {
+                                size: 12,
+                                family: "'Microsoft YaHei', sans-serif"
+                            }
                         }
-                    }
-                }
-            },
-            scales: {
-                x: {
-                    grid: {
-                        display: true,
-                        color: 'rgba(0, 0, 0, 0.1)'
-                    }
-                },
-                y: {
-                    beginAtZero: true,
-                    grid: {
-                        display: true,
-                        color: 'rgba(0, 0, 0, 0.1)'
                     },
-                    ticks: {
-                        callback: function(value) {
-                            return '¥' + value;
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed.y !== null) {
+                                    label += new Intl.NumberFormat('zh-CN', { 
+                                        style: 'currency', 
+                                        currency: 'CNY',
+                                        minimumFractionDigits: 0,
+                                        maximumFractionDigits: 0
+                                    }).format(context.parsed.y);
+                                }
+                                return label;
+                            }
                         }
                     }
-                }
-            },
-            elements: {
-                point: {
-                    radius: 4,
-                    hoverRadius: 6
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            font: {
+                                size: 10,
+                                family: "'Microsoft YaHei', sans-serif"
+                            }
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.05)'
+                        },
+                        ticks: {
+                            font: {
+                                size: 10,
+                                family: "'Microsoft YaHei', sans-serif"
+                            },
+                            callback: function(value) {
+                                return '¥' + value.toLocaleString('zh-CN');
+                            }
+                        }
+                    }
                 }
             }
-        }
-    };
-    
-    // 创建图表
-    try {
-        window.salesTrendChart = new Chart(ctx, config);
-        console.log('✅ 销售趋势图表创建成功');
+        };
+        
+        // 渲染图表
+        const salesTrendChart = safeCreateChart('salesTrendChart', config, '销售趋势图');
+        console.log('销售趋势图表渲染完成');
+        
     } catch (error) {
-        console.error('❌ 销售趋势图表创建失败:', error);
+        console.error('渲染销售趋势图表时出错:', error);
     }
 }
 
@@ -848,46 +923,62 @@ function setupProductModal() {
 
 // 打开产品编辑模态框
 function openProductModal(productId = null) {
-    const modal = document.getElementById('productModal');
-    const form = document.getElementById('productForm');
-    const title = document.getElementById('productModalTitle');
+    console.log('打开产品模态框', productId ? '编辑ID:' + productId : '添加新产品');
     
     // 重置表单
+    const form = document.getElementById('productForm');
     form.reset();
+    
+    // 重置隐藏字段
+    document.getElementById('productId').value = '';
+    
+    // 隐藏删除按钮（默认情况下）
+    const deleteBtn = document.getElementById('deleteProductBtn');
+    if (deleteBtn) {
+        deleteBtn.style.display = 'none';
+    }
+    
+    // 设置标题
+    const title = document.getElementById('productModalTitle');
+    title.textContent = '添加新产品';
+    
+    // 如果是编辑现有产品
+    const products = Store.get('products', []);
     
     if (productId) {
         // 编辑现有产品
-        const products = Store.get('products', []);
         const product = products.find(p => p.id === productId);
-        
         if (product) {
-            document.getElementById('productFormId').value = product.id;
+            document.getElementById('productId').value = product.id;
             document.getElementById('productName').value = product.name;
-            document.getElementById('category').value = product.category;
+            document.getElementById('productCategory').value = product.category;
             document.getElementById('unit').value = product.unit;
             document.getElementById('costPrice').value = product.costPrice;
-            document.getElementById('salePrice').value = product.sellPrice; // 修正字段ID
+            document.getElementById('sellPrice').value = product.sellPrice;
             
             title.textContent = '编辑产品';
+            if (deleteBtn) {
+                deleteBtn.style.display = 'inline-block';
+            }
         }
-    } else {
-        // 添加新产品
-        document.getElementById('productFormId').value = '';
-        title.textContent = '添加新产品';
     }
     
     // 显示模态框
+    const modal = document.getElementById('productModal');
     modal.style.display = 'block';
 }
 
 // 保存产品数据
 function saveProduct() {
-    const formId = document.getElementById('productFormId').value;
+    console.log('保存产品');
+    
+    // 获取表单数据
+    const productId = document.getElementById('productId').value;
     const name = document.getElementById('productName').value.trim();
-    const category = document.getElementById('category').value;
+    const category = document.getElementById('productCategory').value;
     const unit = document.getElementById('unit').value.trim();
     const costPrice = parseFloat(document.getElementById('costPrice').value);
-    const sellPrice = parseFloat(document.getElementById('salePrice').value); // 修正字段ID
+    const sellPrice = parseFloat(document.getElementById('sellPrice').value);
     
     // 验证输入
     if (!name || !unit || isNaN(costPrice) || isNaN(sellPrice)) {
@@ -898,9 +989,9 @@ function saveProduct() {
     // 获取现有产品
     const products = Store.get('products', []);
     
-    if (formId) {
+    if (productId) {
         // 更新现有产品
-        const id = parseInt(formId);
+        const id = parseInt(productId);
         const index = products.findIndex(p => p.id === id);
         
         if (index !== -1) {
@@ -2863,6 +2954,21 @@ function setupEventListeners() {
     } else {
         console.warn('找不到adjustInventoryBtn元素，将在页面切换时重新绑定');
     }
+    
+    // 添加重置数据按钮事件
+    const resetDataBtn = document.getElementById('resetData');
+    if (resetDataBtn) {
+        resetDataBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            if (confirm('确定要重置所有数据吗？这将清除所有产品、库存和交易记录，并重新加载哆啦A梦道具列表。')) {
+                console.log('执行数据重置...');
+                localStorage.clear();
+                alert('数据已重置，页面将重新加载');
+                window.location.reload();
+            }
+        });
+        console.log('重置数据按钮事件已绑定');
+    }
 }
 
 // 页面加载完成后初始化应用
@@ -2878,6 +2984,16 @@ document.addEventListener('DOMContentLoaded', function() {
 // 应用初始化
 function initializeApp() {
     console.log('开始初始化应用...');
+    
+    // 检查URL参数，是否需要重置数据
+    if (window.location.search.includes('reset=true')) {
+        console.log('检测到重置参数，将强制重置数据');
+        localStorage.setItem('forceDoraemonReset', 'true');
+        // 移除URL参数并刷新页面
+        window.history.replaceState({}, document.title, window.location.pathname);
+        window.location.reload();
+        return; // 中止继续执行，等待页面刷新
+    }
     
     // 初始化示例数据
     initializeProducts();

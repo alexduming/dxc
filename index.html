@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>稻香村库存管理系统</title>
+    <title>哆啦A梦未来道具商店</title>
     <link rel="stylesheet" href="style.css">
     <!-- Font Awesome 图标库 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -24,7 +24,7 @@
 <body>
     <div class="container">
         <header>
-            <h1><a href="#dashboard" id="logoLink">稻香村库存管理系统</a></h1>
+            <h1><a href="#dashboard" id="logoLink">哆啦A梦未来道具商店</a></h1>
             <div id="currentDate" class="date-display"></div>
         </header>
         
@@ -38,6 +38,7 @@
                 <li><a href="#finance"><i class="fas fa-coins"></i> 财务管理</a></li>
                 <li><a href="#reports"><i class="fas fa-chart-bar"></i> 报表分析</a></li>
                 <li><a href="#help"><i class="fas fa-question-circle"></i> 使用说明</a></li>
+                <li><a href="#" id="resetData" title="重置数据"><i class="fas fa-sync-alt"></i> 重置数据</a></li>
             </ul>
         </nav>
         
@@ -211,28 +212,51 @@
                         <span class="close">&times;</span>
                         <h3 id="productModalTitle"><i class="fas fa-plus-circle"></i> 添加新产品</h3>
                         <form id="productForm">
-                            <input type="hidden" id="productFormId">
+                            <input type="hidden" id="productId">
                             <div class="form-group">
                                 <label for="productName"><i class="fas fa-tag"></i> 产品名称:</label>
                                 <input type="text" id="productName" required>
                             </div>
                             <div class="form-group">
-                                <label for="category"><i class="fas fa-layer-group"></i> 类别:</label>
-                                <select id="category" required>
-                                    <option value="糕点">糕点</option>
-                                    <option value="月饼">月饼</option>
-                                    <option value="饼干">饼干</option>
-                                    <option value="糖果">糖果</option>
-                                    <option value="其他">其他</option>
+                                <label for="productCategory"><i class="fas fa-layer-group"></i> 类别:</label>
+                                <select id="productCategory" name="category" required>
+                                    <option value="">选择类别</option>
+                                    <option value="飞行道具">飞行道具</option>
+                                    <option value="空间道具">空间道具</option>
+                                    <option value="时间道具">时间道具</option>
+                                    <option value="学习道具">学习道具</option>
+                                    <option value="语言道具">语言道具</option>
+                                    <option value="通讯道具">通讯道具</option>
+                                    <option value="变形道具">变形道具</option>
+                                    <option value="防护道具">防护道具</option>
+                                    <option value="视觉道具">视觉道具</option>
+                                    <option value="武器道具">武器道具</option>
+                                    <option value="影像道具">影像道具</option>
+                                    <option value="气象道具">气象道具</option>
+                                    <option value="超能力道具">超能力道具</option>
+                                    <option value="情感道具">情感道具</option>
+                                    <option value="记忆道具">记忆道具</option>
+                                    <option value="隐身道具">隐身道具</option>
+                                    <option value="速度道具">速度道具</option>
+                                    <option value="力量道具">力量道具</option>
+                                    <option value="命运道具">命运道具</option>
+                                    <option value="复制道具">复制道具</option>
+                                    <option value="其他道具">其他道具</option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label for="unit"><i class="fas fa-balance-scale"></i> 单位:</label>
                                 <select id="unit" required>
-                                    <option value="盒">盒</option>
                                     <option value="个">个</option>
-                                    <option value="斤">斤</option>
-                                    <option value="包">包</option>
+                                    <option value="台">台</option>
+                                    <option value="对">对</option>
+                                    <option value="片">片</option>
+                                    <option value="块">块</option>
+                                    <option value="根">根</option>
+                                    <option value="盒">盒</option>
+                                    <option value="顶">顶</option>
+                                    <option value="副">副</option>
+                                    <option value="套">套</option>
                                 </select>
                             </div>
                             <div class="form-group">
@@ -240,8 +264,8 @@
                                 <input type="number" id="costPrice" step="0.01" min="0" required>
                             </div>
                             <div class="form-group">
-                                <label for="salePrice"><i class="fas fa-money-bill"></i> 建议售价 (¥):</label>
-                                <input type="number" id="salePrice" step="0.01" min="0" required>
+                                <label for="sellPrice"><i class="fas fa-money-bill"></i> 建议售价 (¥):</label>
+                                <input type="number" id="sellPrice" step="0.01" min="0" required>
                             </div>
                             <div class="form-actions">
                                 <button type="submit" class="btn-primary"><i class="fas fa-save"></i> 保存</button>
@@ -459,7 +483,7 @@
                 <div class="help-container">
                     <div class="help-section">
                         <h3>系统概述</h3>
-                        <p>稻香村库存管理系统是一个专为传统糕点店设计的综合管理平台，帮助您高效管理商品、库存、销售和财务数据。</p>
+                        <p>哆啦A梦未来道具商店是一个专为未来科技产品设计的综合管理平台，帮助您高效管理神奇道具、库存、销售和财务数据。</p>
                         
                         <h4>主要功能模块：</h4>
                         <ul>
@@ -510,7 +534,7 @@
                         
                         <div class="help-feature">
                             <h4>商品管理</h4>
-                            <p>支持添加、编辑、删除商品信息，包括商品名称、分类、单位、进价和售价。系统预设了糕点、月饼、饼干、糖果等常见分类。</p>
+                            <p>支持添加、编辑、删除道具信息，包括道具名称、分类、单位、进价和售价。系统预设了飞行道具、空间道具、时间道具等哆啦A梦系列中常见的道具分类。</p>
                         </div>
                         
                         <div class="help-feature">
@@ -565,6 +589,34 @@
                             <li>每月生成月报，分析经营状况，制定下月经营策略</li>
                             <li>重要数据建议截图保存，作为经营记录的补充</li>
                         </ul>
+                    </div>
+                    
+                    <div class="help-section">
+                        <h3>添加新产品</h3>
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <div class="step-title">打开产品管理</div>
+                            <div class="step-content">点击导航栏中的"产品管理"选项卡。</div>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <div class="step-title">添加新道具</div>
+                            <div class="step-content">
+                                <ol>
+                                    <li>点击页面上的"添加新产品"按钮。</li>
+                                    <li>在弹出的表单中填写道具信息：
+                                        <ul>
+                                            <li>产品名称：输入未来道具名称</li>
+                                            <li>类别：选择适当的分类（如飞行道具、空间道具、时间道具等）</li>
+                                            <li>单位：选择计量单位（如个、台、对等）</li>
+                                            <li>成本价：输入进货价格</li>
+                                            <li>销售价：输入零售价格</li>
+                                        </ul>
+                                    </li>
+                                    <li>点击"保存"按钮完成添加。</li>
+                                </ol>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>

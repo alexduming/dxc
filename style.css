@@ -1,16 +1,16 @@
 ﻿/* 鍏ㄥ眬鏍峰紡 */
 :root {
-    --primary-color: #c2332f; /* 194,51,47 */
-    --secondary-color: #e9b44c;
-    --tertiary-color: #9b2915;
+    --primary-color: #1E90FF; /* 哆啦A梦蓝色 */
+    --secondary-color: #FFCC00; /* 哆啦A梦黄色 */
+    --tertiary-color: #1E90FF; /* 修改为哆啦A梦蓝色，原为红色 */
     --text-color: #333;
     --bg-color: #f9f9f9;
     --card-bg: #fff;
     --border-color: #ddd;
     --success-color: #28a745;
-    --danger-color: #dc3545;
-    --warning-color: #ffc107;
-    --info-color: #17a2b8;
+    --danger-color: #1E90FF; /* 修改为哆啦A梦蓝色，原为红色 */
+    --warning-color: #FFCC00; /* 哆啦A梦黄色 */
+    --info-color: #1E90FF; /* 哆啦A梦蓝色 */
 }
 
 * {
@@ -22,8 +22,9 @@
 body {
     font-family: 'Microsoft YaHei', 'PingFang SC', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: var(--text-color);
-    background-color: var(--bg-color);
+    background-color: #F5F9FF; /* 淡蓝色背景 */
     line-height: 1.6;
+    background-image: linear-gradient(to bottom, #FFFFFF, #F0F8FF); /* 白到淡蓝渐变 */
 }
 
 .container {
@@ -32,7 +33,10 @@ body {
     min-height: 100vh;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 15px;
+    padding: 15px;
+    background-color: #FFFFFF;
+    box-shadow: 0 0 20px rgba(30, 144, 255, 0.1); /* 蓝色阴影 */
+    border-radius: 10px;
 }
 
 /* 澶撮儴鏍峰紡 */
@@ -47,6 +51,7 @@ header {
 header h1 {
     color: var(--primary-color);
     font-size: 1.8rem;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .date-display {
@@ -57,9 +62,9 @@ header h1 {
 /* 瀵艰埅鏍峰紡 */
 nav {
     background-color: var(--card-bg);
-    border-radius: 5px;
+    border-radius: 10px; /* 更圆润的边角 */
     margin: 1rem 0;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 8px rgba(30, 144, 255, 0.2); /* 哆啦A梦蓝色阴影 */
 }
 
 nav ul {
@@ -83,6 +88,7 @@ nav ul li a {
 nav ul li a:hover, nav ul li a.active {
     color: var(--card-bg);
     background-color: var(--primary-color);
+    border-radius: 5px; /* 添加圆角 */
 }
 
 /* 涓昏鍐呭鍖哄煙 */
@@ -103,10 +109,17 @@ main {
 /* 鍗＄墖鏍峰紡 */
 .card {
     background-color: var(--card-bg);
-    border-radius: 5px;
+    border-radius: 10px; /* 更圆润的边角 */
     padding: 1rem;
     margin-bottom: 1rem;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+    border-top: 3px solid var(--primary-color); /* 顶部蓝色边框 */
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(30, 144, 255, 0.15);
 }
 
 .dashboard-cards {
@@ -125,22 +138,23 @@ main {
 .card-value {
     font-size: 1.5rem;
     font-weight: bold;
-    color: var(--primary-color);
+    color: var(--primary-color); /* 哆啦A梦蓝色 */
 }
 
-/* 蹇嵎鎿嶄綔鍖哄煙 */
+/* 蹇嵎鎿嶄綔鍖哄煙 */
 .quick-actions {
     background-color: var(--card-bg);
-    border-radius: 5px;
+    border-radius: 10px;
     padding: 1.5rem;
     margin-bottom: 1.5rem;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+    border-left: 5px solid var(--secondary-color); /* 黄色左侧边框 */
 }
 
 .quick-actions h3 {
     font-size: 1.2rem;
     margin-bottom: 1rem;
-    color: var(--text-color);
+    color: var(--primary-color); /* 蓝色标题 */
     text-align: center;
 }
 
@@ -159,7 +173,7 @@ main {
 
 .quick-actions-buttons button:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(194, 51, 47, 0.3);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .quick-actions-buttons button:active {
@@ -176,12 +190,13 @@ main {
 
 .chart-box {
     background-color: var(--card-bg);
-    border-radius: 5px;
+    border-radius: 10px;
     padding: 0.75rem;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    height: 300px; /* 移动端稍微降低高度 */
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+    height: 300px;
     display: flex;
     flex-direction: column;
+    border-top: 3px solid var(--primary-color); /* 蓝色顶部边框 */
 }
 
 .chart-box h3 {
@@ -209,11 +224,12 @@ main {
 /* 琛ㄦ牸鏍峰紡 */
 .table-container {
     background-color: var(--card-bg);
-    border-radius: 5px;
+    border-radius: 10px;
     padding: 1rem;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
     margin-bottom: 1.5rem;
     overflow-x: auto;
+    border-left: 5px solid var(--primary-color); /* 修改为蓝色左侧边框，原为红色 */
 }
 
 .table-container h3 {
@@ -232,22 +248,24 @@ table th, table td {
 }
 
 table th {
-    background-color: #f2f2f2;
+    background-color: rgba(30, 144, 255, 0.1); /* 淡蓝色表头背景 */
     font-weight: bold;
+    color: var(--primary-color); /* 蓝色文字 */
 }
 
 table tbody tr:hover {
-    background-color: #f9f9f9;
+    background-color: rgba(30, 144, 255, 0.05); /* 淡蓝色悬停背景 */
 }
 
 /* 鎸夐挳鏍峰紡 */
 .btn-primary, .btn-secondary, .btn-danger {
     padding: 0.5rem 1rem;
     border: none;
-    border-radius: 4px;
+    border-radius: 20px; /* 更圆润的按钮 */
     cursor: pointer;
     font-weight: bold;
     transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .btn-primary {
@@ -256,7 +274,7 @@ table tbody tr:hover {
 }
 
 .btn-primary:hover {
-    background-color: #a12a27; /* 161,42,39 - 娣变竴鐐圭殑绾㈣壊 */
+    background-color: #0078E7; /* 深一点的蓝色 */
 }
 
 .btn-secondary {
@@ -274,7 +292,7 @@ table tbody tr:hover {
 }
 
 .btn-danger:hover {
-    background-color: #c82333;
+    background-color: #E53935; /* 深一点的红色 */
 }
 
 /* 琛ㄥ崟鏍峰紡 */
@@ -360,7 +378,7 @@ table tbody tr:hover {
 .summary-value {
     font-size: 1.5rem;
     font-weight: bold;
-    color: var(--primary-color);
+    color: var(--primary-color); /* 哆啦A梦蓝色 */
 }
 
 /* 宸ュ叿鏍忔牱寮?*/
@@ -394,11 +412,12 @@ table tbody tr:hover {
     background-color: var(--card-bg);
     margin: 10% auto;
     padding: 1.5rem;
-    border-radius: 5px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    border-radius: 15px; /* 更圆润的边角 */
+    box-shadow: 0 5px 20px rgba(30, 144, 255, 0.2); /* 蓝色阴影 */
     width: 80%;
     max-width: 600px;
     position: relative;
+    border-top: 5px solid var(--primary-color); /* 蓝色顶部边框 */
 }
 
 .close {
@@ -414,8 +433,9 @@ table tbody tr:hover {
 footer {
     padding: 1rem 0;
     text-align: center;
-    border-top: 1px solid var(--border-color);
+    border-top: 2px solid var(--primary-color); /* 蓝色分隔线 */
     margin-top: auto;
+    color: var(--primary-color); /* 蓝色文字 */
 }
 
 /* 甯姪椤甸潰鏍峰紡 */
@@ -503,7 +523,7 @@ footer {
 
 .faq-question {
     font-weight: bold;
-    color: var(--tertiary-color);
+    color: var(--primary-color);
     margin-bottom: 0.5rem;
 }
 
@@ -521,27 +541,23 @@ footer {
 
 /* 绫诲瀷鏍囪鏍峰紡 */
 .type-sale {
-    color: #28a745;
+    color: var(--primary-color); /* 蓝色 - 销售记录 */
     font-weight: bold;
 }
 
 .type-purchase {
-    color: #007bff;
+    color: var(--secondary-color); /* 黄色 - 采购记录 */
     font-weight: bold;
 }
 
 .type-damage {
-    color: #dc3545;
+    color: #8c54ff; /* 紫色 - 损耗记录 */
     font-weight: bold;
 }
 
 .type-expense {
-    color: #6c757d;
+    color: #00b894; /* 青绿色 - 支出记录 */
     font-weight: bold;
-    background-color: #f8f9fa;
-    padding: 2px 6px;
-    border-radius: 3px;
-    font-size: 0.9em;
 }
 
 /* 姹囨€昏鏍峰紡 */
@@ -675,81 +691,81 @@ footer {
 
 /* 搴撳瓨鐘舵€佹牱寮?*/
 .status-critical {
-    color: #dc3545;
+    color: #FFFFFF;
+    background-color: var(--primary-color);
     font-weight: bold;
-    background-color: #f8d7da;
-    padding: 2px 6px;
-    border-radius: 3px;
-    font-size: 0.9em;
+    padding: 3px 8px;
+    border-radius: 4px;
+    display: inline-block;
+    border: 1px solid var(--primary-color);
 }
 
 .status-warning {
-    color: #fd7e14;
+    color: #333333;
+    background-color: var(--secondary-color);
     font-weight: bold;
-    background-color: #fff3cd;
-    padding: 2px 6px;
-    border-radius: 3px;
-    font-size: 0.9em;
+    padding: 3px 8px;
+    border-radius: 4px;
+    display: inline-block;
+    border: 1px solid var(--secondary-color);
 }
 
 .status-low {
-    color: #ffc107;
+    color: #FFFFFF;
+    background-color: #00b894;
     font-weight: bold;
-    background-color: #fff3cd;
-    padding: 2px 6px;
-    border-radius: 3px;
-    font-size: 0.9em;
+    padding: 3px 8px;
+    border-radius: 4px;
+    display: inline-block;
+    border: 1px solid #00b894;
 }
 
 .status-normal {
-    color: #28a745;
+    color: #333333;
+    background-color: #e0f7fa;
     font-weight: bold;
-    background-color: #d4edda;
-    padding: 2px 6px;
-    border-radius: 3px;
-    font-size: 0.9em;
+    padding: 3px 8px;
+    border-radius: 4px;
+    display: inline-block;
+    border: 1px solid #b2ebf2;
 }
 
-/* 负库存样式 */
+/* 负库存警告 */
 .status-negative {
-    color: #ffffff;
+    color: #FFFFFF;
+    background-color: #8c54ff; /* 紫色 */
     font-weight: bold;
-    background-color: #dc3545;
-    padding: 2px 6px;
-    border-radius: 3px;
-    font-size: 0.9em;
-    animation: blink 1.5s infinite;
+    padding: 3px 8px;
+    border-radius: 4px;
+    display: inline-block;
+    border: 1px solid #8c54ff;
+    animation: blink 1s infinite;
 }
 
+/* 负数字样式 */
 .negative-quantity {
-    color: #dc3545;
+    color: var(--primary-color);
     font-weight: bold;
-    font-size: 1.1em;
 }
 
 .negative-stock {
-    background-color: #f8d7da;
-    border-left: 4px solid #dc3545;
+    color: var(--primary-color);
 }
 
 .critical-stock {
-    background-color: #fff3cd;
-    border-left: 4px solid #fd7e14;
+    color: var(--primary-color);
 }
 
 .warning-stock {
-    background-color: #fff3cd;
-    border-left: 4px solid #ffc107;
+    color: var(--secondary-color);
 }
 
 .low-stock {
-    background-color: #e2e3e5;
-    border-left: 4px solid #6c757d;
+    color: #00b894; /* 青绿色 */
 }
 
 .normal-stock {
-    background-color: #d4edda;
-    border-left: 4px solid #28a745;
+    color: #64b5f6; /* 浅蓝色 */
 }
 
 /* 负库存闪烁动画 */
@@ -787,7 +803,7 @@ footer {
 }
 
 #logoLink:hover {
-    color: #c2332f;
+    color: var(--tertiary-color);
     cursor: pointer;
 }
 
@@ -846,16 +862,29 @@ nav ul li a i {
 }
 
 /* 财务汇总特殊图标颜色 */
+.summary-card.income {
+    border-top: 3px solid var(--primary-color); /* 蓝色 - 收入 */
+}
+
+.summary-card.expense {
+    border-top: 3px solid var(--secondary-color); /* 黄色 - 支出 */
+}
+
+.summary-card.profit {
+    border-top: 3px solid #00b894; /* 青绿色 - 利润 */
+}
+
+/* 财务汇总特殊图标颜色 */
 .summary-card.income h4 i {
-    color: var(--success-color);
+    color: var(--primary-color); /* 蓝色 */
 }
 
 .summary-card.expense h4 i {
-    color: var(--danger-color);
+    color: var(--secondary-color); /* 黄色 */
 }
 
 .summary-card.profit h4 i {
-    color: var(--info-color);
+    color: #00b894; /* 青绿色 */
 }
 
 /* 页面标题图标样式 */
@@ -894,4 +923,21 @@ nav ul li a i {
     .card h3 i {
         margin-right: 0.3rem;
     }
+}
+
+/* 页面标题加大加粗 */
+.page h2 {
+    color: var(--primary-color);
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid var(--secondary-color); /* 黄色下划线 */
+    padding-bottom: 0.5rem;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+}
+
+/* 表单元素焦点样式 */
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(30, 144, 255, 0.2);
 }
